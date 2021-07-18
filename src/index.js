@@ -1,8 +1,3 @@
-
-import { error } from '@pnotify/core';
-import '@pnotify/core/dist/BrightTheme.css';
-import '@pnotify/core/dist/PNotify.css';
-
 import './sass/main.scss';
 
 import PhotoApi from './js/API';
@@ -26,44 +21,32 @@ const refs = {
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreBtn.addEventListener('click', fetchImages);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 function onSearch(e) {
   e.preventDefault();
-
   PhotoApiSearch.query = e.currentTarget.elements.query.value;
-  const searchPhotoTrim = PhotoApiSearch.query.trim();
-
-  if (searchPhotoTrim === '') {
-    loadMoreBtn.disable();
-      return noRequest();
-  }
-
-  loadMoreBtn.show();
   PhotoApiSearch.resetPage();
   refs.galleryListRef.innerHTML = '';
-  fetchImages(); 
+  loadMoreBtn.show();
+  loadMoreBtn.disable();
+  onLoadMore()
 }
 
-function fetchImages() {
-  loadMoreBtn.disable();
-  PhotoApiSearch.fetchPhoto().then(hits => {
-    PhotoMarkup(hits);
+function onLoadMore(hits) {
+  PhotoApiSearch.fetchPhoto()
+    .then(PhotoMarcup)
+    .then(data => {
       loadMoreBtn.enable();
       window.scrollTo({
         top: document.documentElement.offsetHeight,
         behavior: 'smooth',
       });
-
-      if(hits.length === 0) {
-        loadMoreBtn.hide();
-          onError();
-      }
-  });
+    })
+     
+   
 }
-
-
-function PhotoMarkup(hits) {
+function PhotoMarcup(hits) {
   refs.galleryListRef.insertAdjacentHTML('beforeend', imageTpl(hits));
 }
 
@@ -76,16 +59,3 @@ document.body.addEventListener('click', event => {
   instance.show();
 });
 
-function onError() {
-  error({
-      text: 'There is no such word, try again!',
-      delay: 2000,
-  });
-}
-
-function noRequest() {
-  error({
-      text: 'Please write a search word..',
-      delay: 2000,
-  });
-}
