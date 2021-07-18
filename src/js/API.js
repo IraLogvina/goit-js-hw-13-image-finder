@@ -1,5 +1,5 @@
 const API_KEY = '22412207-a0ef56cb918658d27ea3da2a0';
-const BASE_URL = 'http://pixabay.com/api';
+const BASE_URL = 'https://pixabay.com/api';
 
 
 export default class ApiPhoto {
