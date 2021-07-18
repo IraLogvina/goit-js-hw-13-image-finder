@@ -21,7 +21,7 @@ const refs = {
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreBtn.addEventListener('click', onLodeMore);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 function onSearch(e) {
   e.preventDefault();
@@ -30,10 +30,10 @@ function onSearch(e) {
   refs.galleryListRef.innerHTML = '';
   loadMoreBtn.show();
   loadMoreBtn.disable();
-  onLodeMore()
+  onLoadMore()
 }
 
-function onLodeMore(hits) {
+function onLoadMore(hits) {
   PhotoApiSearch.fetchPhoto()
     .then(PhotoMarcup)
     .then(data => {
