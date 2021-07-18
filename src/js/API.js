@@ -8,15 +8,13 @@ export default class ApiPhoto {
         this.page = 1;
     }
 
-    fetchPhoto() {
-        const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
+    async fetchPhoto() {
+            const url = `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
 
-    return fetch(url)
-        .then(response => response.json())
-        .then(({ hits }) => {
-            this.incrementPage();
-            return hits;
-        });
+    const response = await fetch(url);
+        const { hits } = await response.json();
+        this.incrementPage();
+        return hits;
     }
 
     incrementPage() {
